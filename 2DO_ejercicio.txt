@@ -1,0 +1,100 @@
+using System;
+using System.Threading;
+using static System.Net.Mime.MediaTypeNames;
+
+class program
+{
+   
+    //declarar clase de menu para el primer hilo
+    static void menu1()
+    {
+        //aqui se establece la cantidad de veces que se repetira la variable, en este caso yo deseo que se repita una sola vez
+        for (int i = 1; i <= 1; i++)
+        {
+            string[] plantas = new string[] { "Buganvilla", "Hortensias", "Lavanda", "Hiedra", "Rosales", "Claveles", "Margaritas", "Geranios", "Glicina", "Tulipanes", "Limonero", "Gardenia", "Petunias" };
+            Console.WriteLine("░░░░░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓");
+            Console.WriteLine(" Mostrando menu " + i +  ": *Plantas en venta*");
+            Console.WriteLine(String.Join("\n", plantas));
+            Console.WriteLine("░░░░░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓");
+        }
+        Console.WriteLine("para regresar presione 3 y pulse la tecla *enter*");
+    }
+    //declarar clase de menu para el segundo hilo
+    static void menu2()
+    {
+        //aqui se establece la cantidad de veces que se repetira la variable, en este caso yo deseo que se repita una sola vez
+        for (int i = 1; i <= 1; i++)
+        {
+            string[] herramientas = new string[] { "Tijeras", "Azada", "Pala", "Rastrillo", "Carretilla", "Pala de mano", "Cultivador manual", "Gubia de jardín", "Cortacésped", "Manguera", "Regadera", "Sierra de jardinería", "Aspersores", "Hacha", "Pico" };
+            Console.WriteLine("░░░░░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓");
+            Console.WriteLine(" Mostrando menu " + i + ": *Herramientas en venta*");
+            Console.WriteLine(String.Join("\n", herramientas));
+           Console.WriteLine("░░░░░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓");
+        }
+        Console.WriteLine("para regresar presione 3 y pulse la tecla *enter*");
+        
+    }
+    //aqui comienza el desarrollo de la consola, lo de arriba es la declaracion de clases y funciones para llamar.
+    static void Main(string[] args)
+    {
+        
+        //aqui se declara y se llaman los hilos de cada menu que creamos arriba
+        Thread fmenu1 = new Thread(new ThreadStart(menu1));
+        Thread fmenu2 = new Thread(menu2);
+
+
+
+        Console.WriteLine("░░░░░░░░░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓");
+        Console.WriteLine("sistema para almacen de plantas y herramientas de jardineria.");
+        Console.WriteLine("░░░░░░░░░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓");
+
+        //menu para seleccionar opciones, al seleccionar una opcion, este llamará a una funcion o clase
+        int opcion = 0;
+        do
+        {
+
+            Console.WriteLine("¿A que seccíon le gustaria acceder?");
+            Console.WriteLine("░░░░░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓");
+            Console.WriteLine(
+                " 1.- Menu de plantas" +
+                "\n 2.- Menu de herramientas" +
+                "\n 4.- Salir del sistema");
+            Console.WriteLine("░░░░░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓");
+            opcion = Convert.ToInt32(Console.ReadLine());
+
+            switch (opcion)
+            {
+                case 1:
+                    Console.Clear();
+                    fmenu1.Start();
+                    break;
+
+                case 2:
+                    Console.Clear();
+                    fmenu2.Start();
+                    break;
+
+                case 3:
+                    Console.Clear();
+                    break;
+
+                case 4:
+                    Console.Clear();
+                    Console.WriteLine("cerrando sistema...");
+                    break;
+            }
+
+        } while (opcion != 4);
+    }
+
+
+
+
+
+
+
+
+
+
+
+};
