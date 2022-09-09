@@ -1,0 +1,142 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Threading;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+namespace Ejercicio_03___APIs
+{
+    class Program
+    {
+        //Método de la API De RandomUser
+        private static void APIRandomUser(int id, int j)
+        {
+            //Crear cliente de HTTP
+            var Cliente2 = new HttpClient();
+
+            //URL de la API de Pokemon
+            var url2 = "http://api-esp32-alexa.herokuapp.com/api/users/" + id;
+
+            //Limpiar los Headers del Request
+            Cliente2.DefaultRequestHeaders.Clear();
+
+            //Respuesta al consultar la URL
+            var respuesta3 = Cliente2.GetAsync(url2).Result;
+
+            //Leer como String la respuesta
+            var respuesta4 = respuesta3.Content.ReadAsStringAsync().Result;
+
+            try
+            {
+                //Convertir a JObject la respuesta
+                dynamic r2 = JObject.Parse(respuesta4);
+
+                //Convertir a String para el Método
+                string json2 = r2.ToString();
+
+                //Decodificar el Json (string) y obtener el atributo name
+                dynamic user = JsonConvert.DeserializeObject<dynamic>(json2);
+                var nombre = user.first_name;
+                var apellido = user.last_name;
+
+
+                //Imprimir el Nombre
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine(j + " -> " + nombre + " " + apellido);
+            }
+            catch
+            {
+                Console.WriteLine("Error del Servidor");
+            }
+        }
+
+        //Método de la API De Pokemon
+        private static void APIPokemon(int id, int i)
+        {
+            //Crear cliente de HTTP
+            var Cliente = new HttpClient();
+
+            //URL de la API de Pokemon
+            var url = "https://pokeapi.co/api/v2/pokemon/" + id;
+
+            //Limpiar los Headers del Request
+            Cliente.DefaultRequestHeaders.Clear();
+
+            //Respuesta al consultar la URL
+            var respuesta1 = Cliente.GetAsync(url).Result;
+
+            //Leer como String la respuesta
+            var respuesta2 = respuesta1.Content.ReadAsStringAsync().Result;
+
+            try
+            {
+                //Convertir a JObject la respuesta
+                dynamic r = JObject.Parse(respuesta2);
+
+                //Convertir a String para el Método
+                string json = r.ToString();
+
+                //Decodificar el Json (string) y obtener el atributo name
+                dynamic pokemon = JsonConvert.DeserializeObject<dynamic>(json);
+                var nombre = pokemon.name;
+
+                //Imprimir el Nombre
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(i + " -> " + nombre);
+            }
+            catch
+            {
+                Console.WriteLine("Error del Servidor");
+            }
+        }//Fin del Método de API de Pokemon
+
+        //Método del Hilo de Pokemón
+        static void HiloPokemon()
+        {
+            for (int i = 1; i < 101; i++)
+            {
+                //random se utiliza para poder generar una variable aleatoria, pero en este caso se esta empleando para poder tomar un valor aleatorio dentro de los nombres de la pokeapi
+                Random r1 = new Random();
+
+                Console.WriteLine("░░░░░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓");
+                Console.WriteLine("");
+                APIPokemon(r1.Next(1, 905), i);
+               
+            }
+        }//Fin del Hilo de Pokemon
+
+        //Método del Hilo de Usuario Random
+        static void HiloRandomUser()
+        {
+            for (int j = 1; j < 101; j++)
+            {
+                //random se utiliza para poder generar una variable aleatoria, pero en este caso se esta empleando para poder tomar un valor aleatorio dentro de los nombres de usuario
+                Random r2 = new Random();
+
+                APIRandomUser(r2.Next(1, 100), j);
+                Console.WriteLine("░░░░░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓");
+            }
+        }//Fin del Método del Usuario Random
+
+        // Función Main
+        static void Main(string[] args)
+        {
+            Console.Title = "Actividad 3: APIS"; // Darle nombre a la Consola
+            Console.ForegroundColor = ConsoleColor.White;
+
+            //Creación e Inicialización de los Hilos
+            Thread hiloPokemon = new Thread(HiloPokemon);
+            Thread hiloUser = new Thread(HiloRandomUser);
+
+            hiloPokemon.Start();
+            hiloUser.Start();
+
+            Console.ReadKey();
+
+        }// Fin del Main
+    }
+}
