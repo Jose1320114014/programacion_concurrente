@@ -1,0 +1,138 @@
+using System;
+using System.Threading.Tasks;
+using SendGrid;
+using SendGrid.Helpers.Mail;
+using System.Collections.Generic;
+
+class Program
+{
+
+    static void Main(string[] args)
+    {
+        email().Wait();
+    }
+    static async Task email() { 
+
+        var apiKey = Environment.GetEnvironmentVariable("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");
+        var client = new SendGridClient("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");
+        var from = new EmailAddress("ssdoluis@gmail.com", "mr");
+        string[] emails =
+            {
+            "john.juanpa@gmail.com",
+            "andres_1319104059@uptecamac.edu.mx",
+                "antonio_1320114110@uptecamac.edu.mx",
+                "arlet_1320114104@uptecamac.edu.mx",
+                "armando_1320114173@uptecamac.edu.mx",
+                "brayan_1320114097@uptecamac.edu.mx",
+                "bryan_1320114027@uptecamac.edu.mx",
+                "cesar_1320114045@uptecamac.edu.mx",
+                "clara_1319104678@uptecamac.edu.mx",
+                "cristina_1320114102@uptecamac.edu.mx",
+                "dania_1320114056@uptecamac.edu.mx",
+                "eduardo_1320114070@uptecamac.edu.mx",
+                "eduardo_1319104044@uptecamac.edu.mx",
+                "erick_1320114122@uptecamac.edu.mx",
+                "erik_1320114042@uptecamac.edu.mx",
+                "fernando_1320114054@uptecamac.edu.mx",
+                "fernando_1320114003@uptecamac.edu.mx",
+                "gabriela_1320114091@uptecamac.edu.mx",
+                "irving_1320114055@uptecamac.edu.mx",
+                "ivan_1320114136@uptecamac.edu.mx",
+                "jorge_1319104161@uptecamac.edu.mx",
+                "jose_1320114014@uptecamac.edu.mx",
+                "juan_1320114117@uptecamac.edu.mx",
+                "karen_1319104657@uptecamac.edu.mx",
+                "luis_1320114059@uptecamac.edu.mx",
+                "luis_1320114181@uptecamac.edu.mx",
+                "miguel_1319104806@uptecamac.edu.mx",
+                "rodrigo_1320114154@uptecamac.edu.mx",
+                "sebastian_1320114046@uptecamac.edu.mx",
+        };
+
+        string[] nombre_compañeros = {
+            "Juan Pablo Romero Zamora",
+                "Andrés Aviña Hernández",
+                "Antonio de Jesús Buendía Arguello",
+                "Arlet Esmeralda Castro Rodríguez",
+                "Armando López Gondar",
+                "Brayan Yahir Cortes Flores",
+                "Bryan Hernández Solis",
+                "Cesar Yahir Lopez Lopez",
+                "Clara Monserrat Vera Hernández",
+                "Cristina Lira Tecoxotitla",
+                "Dania Yanin Chavez Zavala",
+                "Eduardo Antonio Mendéz Sandoval",
+                "Eduardo Viñas Valdez",
+                "Erick Ulises Ramírez Pérez",
+                "Erik Samuel Hernández García",
+                "Fernando Brayan Mejía Gómez",
+                "Fernando Manuel Galván",
+                "Gabriela Menéndez Gómez",
+                "Irving Alberto Martínez Santos",
+                "Ivan Maya Nava",
+                "Jorge Antonio Antunez Flores",
+                "Jose Luis Lopez Guerrero",
+                "Juan Pablo Paredes Mendoza",
+                "Karen Ali Mujica Zarate",
+                "Luis Fernando Hernández García",
+                "Luis Ivan Tenorio Grcía",
+                "Miguel Ángel Martínez Castro",
+                "Rodrigo De Jesús Camargo González",
+                "Irving Gregorio Sebastián Ildefonso",
+        };
+
+        //Lista Emails Destinatarios
+        List<EmailAddress> to = new List<EmailAddress>();
+
+        //Llenar la lista de Emails
+        foreach (string item in emails)
+        {
+            var i = new EmailAddress(item);
+            to.Add(i);
+        }
+
+        //Lista Asunto
+        List<string> subject = new List<string>();
+
+        //Llenar la lista Asunto
+        foreach (string item in nombre_compañeros)
+        {
+            subject.Add("Probando enviar un correo desde sendgrid... ");
+        }
+
+        //Texto
+        var plainTextContent = " Hola -name-.";
+
+        //Texto en HTML
+        var htmlContent = "<strong>Un gusto -name- !</strong>,como puedes ver, he logrado enviar un correo desde sendgrid con c#";
+
+        //Lista de Substituciones (mensajes personalizados)
+        List<Dictionary<string, string>> subs = new List<Dictionary<string, string>>();
+
+        foreach (string item in nombre_compañeros)
+        {
+            var j = new Dictionary<string, string> { { "-name-", item } };
+            subs.Add(j);
+        }
+
+        //Construir Multiples Emails a Multiples Destinatarios
+        var msg = MailHelper.CreateMultipleEmailsToMultipleRecipients(
+            from,
+            to,
+            subject,
+            plainTextContent,
+            htmlContent,
+            subs
+        );
+
+        //Enviar los Emails
+        var response = await client.SendEmailAsync(msg);
+
+        //Imprimir el Status
+        Console.WriteLine(response.StatusCode.ToString());
+
+        Console.ReadKey();
+
+    }
+}
+      
