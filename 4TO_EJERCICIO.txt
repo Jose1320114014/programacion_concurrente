@@ -13,8 +13,7 @@ class Program
     }
     static async Task email() { 
 
-        var apiKey = Environment.GetEnvironmentVariable("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");
-        var client = new SendGridClient("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");
+        
         var from = new EmailAddress("ssdoluis@gmail.com", "mr");
         string[] emails =
             {
